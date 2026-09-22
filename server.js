@@ -1,24 +1,28 @@
-// import express library
-const express = req('express');
-const path = req("path");
+// 1. Import the express library
+import express from 'express'
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-// create an instance of an Express app
+// 2. Create an instance of an Express application
 const app = express();
-// define the port the server will run on
-const PORT = 3000;
 
+// 3. Define the port the server will run on
+const port = 3000;
+const __filename = fileURLToPath(import.meta.url); // file absolute path
+const __dirname = path.dirname(__filename); // directory full path
 
-// define a route handler for GET requests to the root URL ('/
+// Mount middleware
+app.use(express.static(path.join(__dirname, 'public'))); // <- updated
+
+// 4. Define a route handler for GET requests to the root URL ('/')
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+    console.log(`Incoming Request| URL: ${req.url} | method: ${req.method}`);
+    
+    // res.send('<h1>Hello, Express!</h1>');
+    // res.json({"user": "me"});
 });
 
-app.get("/contact", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "contact.html"));
-});
-
-// start the server and have it listen for incoming connection
-app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
-  
+// 5. Start the server and have it listen for incoming connections
+app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
 });
